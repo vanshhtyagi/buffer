@@ -349,9 +349,9 @@
       hintEl.textContent = hints[h];
       hintEl.style.opacity = '1';
     }, 250);
-  }, 2000);
+  }, 5000);
 
-  // After 50 seconds, transition to the moon scene
+  // After 18 seconds, transition to the moon scene
   setTimeout(() => {
     clearInterval(msgInterval);
     clearInterval(hintInterval);
@@ -362,7 +362,7 @@
     night.classList.add('visible');
     night.setAttribute('aria-hidden', 'false');
     document.title = 'Goodnight';
-  }, 50000);
+  }, 18000);
 </script>
 </body>
 </html>
