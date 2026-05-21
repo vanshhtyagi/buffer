@@ -339,6 +339,37 @@
     box-shadow: 0 0 14px rgba(199, 146, 234, 0.7);
   }
 
+  /* ========== LOADER 6: MORPH (slow shape-shifter) ========== */
+  .morph-loader {
+    width: 80px;
+    height: 80px;
+    background: var(--accent-blue);
+    box-shadow: 0 0 30px rgba(124, 156, 255, 0.4);
+    animation: morph 4s ease-in-out infinite;
+  }
+  @keyframes morph {
+    0%, 100% {
+      border-radius: 8px;
+      transform: rotate(0deg);
+      background: var(--accent-blue);
+    }
+    25% {
+      border-radius: 50%;
+      transform: rotate(90deg);
+      background: var(--accent-pink);
+    }
+    50% {
+      border-radius: 8px;
+      transform: rotate(180deg);
+      background: var(--accent-teal);
+    }
+    75% {
+      border-radius: 50%;
+      transform: rotate(270deg);
+      background: var(--accent-purple);
+    }
+  }
+
   /* ========== BLANK PAGE ========== */
   .blank-page {
     background: #ffffff !important;
@@ -441,6 +472,7 @@
     <button class="nav-btn" data-target="pulse">Pulsing Ring</button>
     <button class="nav-btn" data-target="bars">Audio Bars</button>
     <button class="nav-btn" data-target="orbit">Orbit</button>
+    <button class="nav-btn" data-target="morph">Slow Loader</button>
     <button class="nav-btn" data-target="blank">Blank Page</button>
   </nav>
 
@@ -524,13 +556,33 @@
       </div>
     </section>
 
+    <!-- Morph (slow loader) -->
+    <section class="page loader-page" data-page="morph">
+      <div class="loader-host">
+        <div class="morph-loader"></div>
+      </div>
+      <div class="loader-label">Taking longer than usual<span class="dots"></span></div>
+      <div class="night-scene">
+        <div class="moon"></div>
+        <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+      </div>
+    </section>
+
     <!-- Blank -->
     <section class="page blank-page" data-page="blank"></section>
 
   </main>
 
 <script>
-  const TRANSITION_MS = 20000; // 20 seconds before night-scene fades in
+  // Per-loader transition delays (ms) before the night scene fades in
+  const TRANSITION_MS = {
+    spinner: 20000,
+    dots:    20000,
+    pulse:   20000,
+    bars:    20000,
+    orbit:   20000,
+    morph:   45000,
+  };
 
   const buttons = document.querySelectorAll('.nav-btn');
   const pages = document.querySelectorAll('.page');
@@ -551,13 +603,12 @@
     clearMoon();
     if (timer) { clearTimeout(timer); timer = null; }
 
-    const isLoader = ['spinner', 'dots', 'pulse', 'bars', 'orbit'].includes(target);
-    if (isLoader) {
+    if (target in TRANSITION_MS) {
       const activePage = document.querySelector(`.page[data-page="${target}"]`);
       const night = activePage.querySelector('.night-scene');
       timer = setTimeout(() => {
         if (night) night.classList.add('visible');
-      }, TRANSITION_MS);
+      }, TRANSITION_MS[target]);
     }
   }
 
